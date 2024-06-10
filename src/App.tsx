@@ -1,32 +1,11 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// import { TeamMember } from './assets/teamMember';
-// import TeamList from './components/TeamList';
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <TeamList/>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NameList from './NameList';
 import Cookies from 'js-cookie';
+import Confetti from 'react-confetti';
+import { db } from './firebase';
+import { collection, getDocs, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 
-
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-// margin: 20px;
 const AppContainer = styled.div`
   text-align: center;
   background-color: #282c34;
@@ -37,6 +16,7 @@ const AppContainer = styled.div`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: relative;
 `;
 
 const Title = styled.h1`
@@ -56,41 +36,60 @@ const ResetButton = styled.button`
 `;
 
 export interface Name {
-  id: number;
+  id: string;
   name: string;
   votes: number;
-  comments: string[];
+  comments: { [key: string]: string };
 }
 
 const App: React.FC = () => {
-  const initialNames = [
-    { id: 0, name: 'Aďo B.', votes: 0, comments: [] },
-    { id: 1, name: 'Anka M.', votes: 0, comments: [] },
-    { id: 2, name: 'Daniel R.', votes: 0, comments: [] },
-    { id: 3, name: 'Ivan O.', votes: 0, comments: [] },
-    { id: 4, name: 'Kika K.', votes: 0, comments: [] },
-    { id: 5, name: 'Lenka N.', votes: 0, comments: [] },
-    { id: 6, name: 'Martin N.', votes: 0, comments: [] },
-    { id: 7, name: 'Samo S.', votes: 0, comments: [] },
-    { id: 8, name: 'Tomas V.', votes: 0, comments: [] },
-    { id: 9, name: 'Vlado K.', votes: 0, comments: [] },
-  ]
+  const [names, setNames] = useState<Name[]>([]);
+  const [confetti, setConfetti] = useState(true);
 
-  const [names, setNames] = useState<Name[]>(initialNames);
+  useEffect(() => {
+    const fetchNames = async () => {
+      const namesCollection = collection(db, 'names');
+      const snapshot = await getDocs(namesCollection);
+      const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
+      setNames(namesList);
+    };
+
+    const subscribeToUpdates = () => {
+      const namesCollection = collection(db, 'names');
+      onSnapshot(namesCollection, snapshot => {
+        const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
+        setNames(namesList);
+      });
+    };
+
+    fetchNames();
+    subscribeToUpdates();
+
+    const timer = setTimeout(() => {
+      setConfetti(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleReset = () => {
-    setNames(initialNames);
+    const resetNames = names.map(name => ({ ...name, votes: 0, comments: {} }));
+    resetNames.forEach(async name => {
+      const nameDoc = doc(db, 'names', name.id);
+      await updateDoc(nameDoc, { votes: 0, comments: {} });
+    });
+    setNames(resetNames);
     Cookies.remove('votedName');
   };
 
   return (
     <div className="base">
+      {confetti && <Confetti />}
       <AppContainer>
         <Title>ISTC Sprint Hero</Title>
         <NameList names={names} setNames={setNames} />
         <ResetButton onClick={handleReset}>Reset</ResetButton>
       </AppContainer>
-
     </div>
   );
 }

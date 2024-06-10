@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Name } from './App';
+import { db } from './firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -52,14 +54,19 @@ interface CommentsModalProps {
 const CommentsModal: React.FC<CommentsModalProps> = ({ name, setNames, names, onClose }) => {
   const [comment, setComment] = useState('');
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (comment.trim()) {
-      const updatedNames = names.map((n) =>
+      const updatedComments = { ...name.comments, [Object.keys(name.comments).length]: comment };
+      const updatedNames = names.map(n =>
         n.id === name.id
-          ? { ...n, comments: [...n.comments, comment] }
+          ? { ...n, comments: updatedComments }
           : n
       );
       setNames(updatedNames);
+
+      const nameDoc = doc(db, 'names', name.id);
+      await updateDoc(nameDoc, { comments: updatedComments });
+
       setComment('');
     }
   };
@@ -70,7 +77,7 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ name, setNames, names, on
       <ModalContainer>
         <h2>Comments for {name.name}</h2>
         <CommentList>
-          {name.comments.map((comment, index) => (
+          {Object.values(name.comments).map((comment, index) => (
             <CommentItem key={index}>{comment}</CommentItem>
           ))}
         </CommentList>

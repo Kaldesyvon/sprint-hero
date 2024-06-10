@@ -3,7 +3,8 @@ import styled, { css } from 'styled-components';
 import CommentsModal from './CommentsModal';
 import { Name } from './App';
 import Cookies from 'js-cookie';
-import { readFileSync } from 'fs';
+import { db } from './firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const ItemContainer = styled.div<{ isFirst: boolean }>`
   color: lightgray;
@@ -17,7 +18,8 @@ const ItemContainer = styled.div<{ isFirst: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  width: 60%
+  width: ${(props) => (props.isFirst ? '80%' : '60%')};
+  max-width: 600px;
   ${(props) =>
     props.isFirst &&
     css`
@@ -44,16 +46,19 @@ interface NameItemProps {
 const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index }) => {
   const [showComments, setShowComments] = useState(false);
 
-  const handleVote = () => {
+  const handleVote = async () => {
     const votedName = Cookies.get('votedName');
     if (votedName) {
       alert('You have already voted for a name.');
       return;
     }
 
-    setNames(
-      names.map((n) => (n.id === name.id ? { ...n, votes: n.votes + 1 } : n))
-    );
+    const updatedNames = names.map(n => n.id === name.id ? { ...n, votes: n.votes + 1 } : n);
+    setNames(updatedNames);
+
+    const nameDoc = doc(db, 'names', name.id);
+    await updateDoc(nameDoc, { votes: name.votes + 1 });
+
     Cookies.set('votedName', name.id.toString(), { expires: 365 });
   };
 

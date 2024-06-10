@@ -4,8 +4,10 @@ import NameItem from './NameItem';
 import { Name } from './App';
 
 const ListContainer = styled.div`
-  width: 30%;
-  text-align: center;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 interface NameListProps {
