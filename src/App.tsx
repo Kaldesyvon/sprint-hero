@@ -48,10 +48,16 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchNames = async () => {
-      const namesCollection = collection(db, 'names');
-      const snapshot = await getDocs(namesCollection);
-      const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
-      setNames(namesList);
+      console.log("connecting...")
+      try {
+        const namesCollection = collection(db, 'names');
+        const snapshot = await getDocs(namesCollection);
+        const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
+        setNames(namesList);
+        console.log('Connected to Firestore successfully.');
+      } catch (error) {
+        console.error('Error connecting to Firestore:', error);
+      }
     };
 
     const subscribeToUpdates = () => {
