@@ -4,9 +4,9 @@ import CommentsModal from './CommentsModal';
 import { Name } from './App';
 import Cookies from 'js-cookie';
 import { db } from './firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { ref, update } from 'firebase/database';
 
-const ItemContainer = styled.div<{ isFirst: boolean }>`
+const ItemContainer = styled.div<{ isFirst: boolean, hasVotes: boolean }>`
   color: lightgray;
   font-size: xx-large;
   border-style: solid;
@@ -18,13 +18,15 @@ const ItemContainer = styled.div<{ isFirst: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  width: ${(props) => (props.isFirst ? '80%' : '60%')};
+  width: 60%;
   max-width: 600px;
+
   ${(props) =>
-    props.isFirst &&
+    props.isFirst && props.hasVotes &&
     css`
       font-size: xxx-large;
       font-weight: bold;
+      width: 80%;
     `}
 `;
 
@@ -56,14 +58,14 @@ const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index }) => 
     const updatedNames = names.map(n => n.id === name.id ? { ...n, votes: n.votes + 1 } : n);
     setNames(updatedNames);
 
-    const nameDoc = doc(db, 'names', name.id);
-    await updateDoc(nameDoc, { votes: name.votes + 1 });
+    const nameRef = ref(db, `names/${name.id}`);
+    await update(nameRef, { votes: name.votes + 1 });
 
     Cookies.set('votedName', name.id.toString(), { expires: 365 });
   };
 
   return (
-    <ItemContainer isFirst={index === 0}>
+    <ItemContainer isFirst={index === 0} hasVotes={name.votes > 0}>
       <NameDisplay>{name.name}</NameDisplay>
       <div>{name.votes}</div>
       <Button onClick={handleVote}>Vote</Button>

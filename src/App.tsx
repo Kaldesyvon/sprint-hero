@@ -4,7 +4,7 @@ import NameList from './NameList';
 import Cookies from 'js-cookie';
 import Confetti from 'react-confetti';
 import { db } from './firebase';
-import { collection, getDocs, doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { ref, onValue, set } from 'firebase/database';
 
 const AppContainer = styled.div`
   text-align: center;
@@ -47,42 +47,39 @@ const App: React.FC = () => {
   const [confetti, setConfetti] = useState(true);
 
   useEffect(() => {
-    const fetchNames = async () => {
-      console.log("connecting...")
+    const fetchNames = () => {
       try {
-        const namesCollection = collection(db, 'names');
-        const snapshot = await getDocs(namesCollection);
-        const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
-        setNames(namesList);
-        console.log('Connected to Firestore successfully.');
-      } catch (error) {
-        console.error('Error connecting to Firestore:', error);
+        console.log("fetching");
+        const namesRef = ref(db, 'names');
+        onValue(namesRef, (snapshot) => {
+          console.log("got database");
+          const data = snapshot.val();
+          const namesList = data
+            ? Object.keys(data).map(key => ({ id: key, name: data[key].name, votes: data[key].votes, comments: data[key].comments }))
+            : [];
+          const sortedNamesList = namesList.sort((a, b) => b.votes - a.votes); // Sort by votes in descending order
+          setNames(sortedNamesList);
+          console.log('Connected to Realtime Database successfully.');
+        });
+      } catch (e) {
+        console.log("failed to fetch: " + (e as Error).message);
       }
     };
 
-    const subscribeToUpdates = () => {
-      const namesCollection = collection(db, 'names');
-      onSnapshot(namesCollection, snapshot => {
-        const namesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Name[];
-        setNames(namesList);
-      });
-    };
-
     fetchNames();
-    subscribeToUpdates();
 
     const timer = setTimeout(() => {
       setConfetti(false);
-    }, 3000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, []);
 
   const handleReset = () => {
-    const resetNames = names.map(name => ({ ...name, votes: 0, comments: {} }));
+    const resetNames = names.map(name => ({ ...name, votes: 0, comments: { "0": "none" } }));
     resetNames.forEach(async name => {
-      const nameDoc = doc(db, 'names', name.id);
-      await updateDoc(nameDoc, { votes: 0, comments: {} });
+      const nameRef = ref(db, `names/${name.id}`);
+      await set(nameRef, { ...name, votes: 0, comments: { "0": "none" } });
     });
     setNames(resetNames);
     Cookies.remove('votedName');

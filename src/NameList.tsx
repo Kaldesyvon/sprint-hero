@@ -16,9 +16,10 @@ interface NameListProps {
 }
 
 const NameList: React.FC<NameListProps> = ({ names, setNames }) => {
+  const sortedNames = names.sort((a, b) => b.votes - a.votes);
   return (
     <ListContainer>
-      {names.map((name, index) => (
+      {sortedNames.map((name, index) => (
         <NameItem key={name.id} name={name} setNames={setNames} names={names} index={index} />
       ))}
     </ListContainer>
