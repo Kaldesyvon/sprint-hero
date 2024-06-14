@@ -33,7 +33,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Deploy to GH
-        run: |
-          git config --global user.email "default@email.com"
-          git config --global user.name "Mercedes Benz" 
-          npm run deploy
+        uses: actions/deploy-pages@v3
