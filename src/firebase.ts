@@ -12,7 +12,7 @@ const firebaseConfig = {
     appId: process.env.APP_ID,
 };
 
-console.log(firebaseConfig. databaseURL)
+console.log(firebaseConfig.databaseURL)
 console.log(firebaseConfig.projectId)
 
 const app = initializeApp(firebaseConfig);
