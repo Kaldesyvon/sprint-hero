@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Print Environment Variables
+        run: printenv | grep REACT_APP
+
       - name: Install dependencies
         run: npm install
 
@@ -33,9 +36,9 @@ jobs:
           REACT_APP_STORAGE_BUCKET: ${{ secrets.REACT_APP_STORAGE_BUCKET }}
           REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
           REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
-          REACT_APP_DATABASE_URL: ${{ secrets.REACT_APP_DATABASE_URL  }}
+          REACT_APP_DATABASE_URL: ${{ secrets.REACT_APP_DATABASE_URL }}
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build 
+          folder: build
