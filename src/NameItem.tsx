@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { db } from './firebase';
 import { ref, update } from 'firebase/database';
 
-const ItemContainer = styled.div<{ isFirst: boolean, hasVotes: boolean }>`
+const ItemContainer = styled.div<{ isFirst: boolean, showVotes: boolean, hasVotes: boolean }>`
   color: lightgray;
   font-size: xx-large;
   border-style: solid;
@@ -22,7 +22,7 @@ const ItemContainer = styled.div<{ isFirst: boolean, hasVotes: boolean }>`
   max-width: 600px;
 
   ${(props) =>
-    props.isFirst && props.hasVotes &&
+    props.isFirst && props.showVotes && props.hasVotes &&
     css`
       font-size: xxx-large;
       font-weight: bold;
@@ -66,7 +66,7 @@ const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index, showV
   };
 
   return (
-    <ItemContainer isFirst={index === 0} hasVotes={name.votes > 0}>
+    <ItemContainer isFirst={index === 0} showVotes={showVotes} hasVotes={name.votes > 0}>
       <NameDisplay>{name.name}</NameDisplay>
       {showVotes && <div>{name.votes}</div>}
       <Button onClick={handleVote}>Vote</Button>
