@@ -9,14 +9,14 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #282c34; /* Match app background color */
+  background: #282c34;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  width: 80%;  /* Set a consistent width */
-  max-width: 600px; /* Optional: set a max-width */
-  color: white; /* Match app text color */
-  border-radius: 10px; /* Add some border radius for a nice effect */
+  width: 80%;
+  max-width: 600px;
+  color: white;
+  border-radius: 10px;
 `;
 
 const Overlay = styled.div`
@@ -36,19 +36,19 @@ const CommentList = styled.ul`
 
 const CommentItem = styled.li`
   padding: 5px 0;
-  border-bottom: 1px solid gray; /* Add some separation between comments */
-  word-wrap: break-word; /* Ensure long words break to the next line */
-  white-space: pre-wrap; /* Preserve whitespace and wrap text */
+  border-bottom: 1px solid gray; 
+  word-wrap: break-word;
+  white-space: pre-wrap;
 `;
 
 const CommentInput = styled.input`
   width: calc(100% - 90px);
   padding: 5px;
   margin-right: 10px;
-  background: #444; /* Match app input background color */
-  color: white; /* Match app input text color */
-  border: none; /* Remove default border */
-  border-radius: 5px; /* Add border radius */
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
 `;
 
 const ButtonContainer = styled.div`
@@ -58,16 +58,16 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  background: #61dafb; /* Match app button background color */
-  color: black; /* Match app button text color */
+  background: #61dafb;
+  color: black;
   border: none;
   padding: 5px 10px;
-  border-radius: 5px; /* Add border radius */
+  border-radius: 5px;
   cursor: pointer;
-  margin-right: 10px; /* Adjust this line to change spacing between buttons */
+  margin-right: 10px;
 
   &:hover {
-    background: #21a1f1; /* Darken button on hover */
+    background: #21a1f1;
   }
 `;
 
