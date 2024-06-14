@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sprint-hero/static/css/main.e6c13ad2.css",
-    "main.js": "/sprint-hero/static/js/main.06a5f852.js",
+    "main.js": "/sprint-hero/static/js/main.e51dfebc.js",
     "static/js/453.e96141c5.chunk.js": "/sprint-hero/static/js/453.e96141c5.chunk.js",
     "index.html": "/sprint-hero/index.html",
     "main.e6c13ad2.css.map": "/sprint-hero/static/css/main.e6c13ad2.css.map",
-    "main.06a5f852.js.map": "/sprint-hero/static/js/main.06a5f852.js.map",
+    "main.e51dfebc.js.map": "/sprint-hero/static/js/main.e51dfebc.js.map",
     "453.e96141c5.chunk.js.map": "/sprint-hero/static/js/453.e96141c5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.06a5f852.js"
+    "static/js/main.e51dfebc.js"
   ]
 }
