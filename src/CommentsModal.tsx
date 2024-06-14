@@ -14,7 +14,7 @@ const ModalContainer = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   width: 80%;  /* Set a consistent width */
-  max-width: 800px; /* Optional: set a max-width */
+  max-width: 600px; /* Optional: set a max-width */
   color: white; /* Match app text color */
   border-radius: 10px; /* Add some border radius for a nice effect */
 `;
@@ -37,6 +37,8 @@ const CommentList = styled.ul`
 const CommentItem = styled.li`
   padding: 5px 0;
   border-bottom: 1px solid gray; /* Add some separation between comments */
+  word-wrap: break-word; /* Ensure long words break to the next line */
+  white-space: pre-wrap; /* Preserve whitespace and wrap text */
 `;
 
 const CommentInput = styled.input`
@@ -49,15 +51,20 @@ const CommentInput = styled.input`
   border-radius: 5px; /* Add border radius */
 `;
 
-const Button = styled.button`
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
   margin-top: 10px;
+`;
+
+const Button = styled.button`
   background: #61dafb; /* Match app button background color */
   color: black; /* Match app button text color */
   border: none;
   padding: 5px 10px;
   border-radius: 5px; /* Add border radius */
   cursor: pointer;
-  margin-left: 5px;
+  margin-right: 10px; /* Adjust this line to change spacing between buttons */
 
   &:hover {
     background: #21a1f1; /* Darken button on hover */
@@ -112,8 +119,10 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ name, setNames, names, on
           value={comment}
           onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setComment(e.target.value)}
         />
-        <Button onClick={handleAddComment}>Add Comment</Button>
-        <Button onClick={onClose}>Close</Button>
+        <ButtonContainer>
+          <Button onClick={handleAddComment}>Add Comment</Button>
+          <Button onClick={onClose}>Close</Button>
+        </ButtonContainer>
       </ModalContainer>
     </>
   );

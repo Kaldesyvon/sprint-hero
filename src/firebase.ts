@@ -12,9 +12,6 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
 };
 
-console.log(firebaseConfig.databaseURL)
-console.log(firebaseConfig.projectId)
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
