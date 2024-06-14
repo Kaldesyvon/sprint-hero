@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-      
+
 permissions:
-          id-token: write
+  id-token: write
 
 jobs:
   build-and-deploy:
