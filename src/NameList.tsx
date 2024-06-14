@@ -13,14 +13,14 @@ const ListContainer = styled.div`
 interface NameListProps {
   names: Name[];
   setNames: React.Dispatch<React.SetStateAction<Name[]>>;
+  showVotes: boolean;
 }
 
-const NameList: React.FC<NameListProps> = ({ names, setNames }) => {
-  const sortedNames = names.sort((a, b) => b.votes - a.votes);
+const NameList: React.FC<NameListProps> = ({ names, setNames, showVotes }) => {
   return (
     <ListContainer>
-      {sortedNames.map((name, index) => (
-        <NameItem key={name.id} name={name} setNames={setNames} names={names} index={index} />
+      {names.map((name, index) => (
+        <NameItem key={name.id} name={name} setNames={setNames} names={names} index={index} showVotes={showVotes} />
       ))}
     </ListContainer>
   );

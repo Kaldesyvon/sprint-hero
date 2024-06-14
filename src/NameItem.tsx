@@ -43,9 +43,10 @@ interface NameItemProps {
   setNames: React.Dispatch<React.SetStateAction<Name[]>>;
   names: Name[];
   index: number;
+  showVotes: boolean;
 }
 
-const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index }) => {
+const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index, showVotes }) => {
   const [showComments, setShowComments] = useState(false);
 
   const handleVote = async () => {
@@ -67,7 +68,7 @@ const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index }) => 
   return (
     <ItemContainer isFirst={index === 0} hasVotes={name.votes > 0}>
       <NameDisplay>{name.name}</NameDisplay>
-      <div>{name.votes}</div>
+      {showVotes && <div>{name.votes}</div>}
       <Button onClick={handleVote}>Vote</Button>
       <Button onClick={() => setShowComments(true)}>Expand</Button>
       {showComments && (

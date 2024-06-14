@@ -35,6 +35,22 @@ const ResetButton = styled.button`
   cursor: pointer;
 `;
 
+const FinishButton = styled.button`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #61dafb;
+  border: none;
+  color: black;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+
+  &:hover {
+    background: #21a1f1;
+  }
+`;
+
 export interface Name {
   id: string;
   name: string;
@@ -44,7 +60,8 @@ export interface Name {
 
 const App: React.FC = () => {
   const [names, setNames] = useState<Name[]>([]);
-  const [confetti, setConfetti] = useState(true);
+  const [showVotes, setShowVotes] = useState(false);
+  const [confetti, setConfetti] = useState(false);
 
   useEffect(() => {
     const fetchNames = () => {
@@ -57,8 +74,7 @@ const App: React.FC = () => {
           const namesList = data
             ? Object.keys(data).map(key => ({ id: key, name: data[key].name, votes: data[key].votes, comments: data[key].comments }))
             : [];
-          const sortedNamesList = namesList.sort((a, b) => b.votes - a.votes); // Sort by votes in descending order
-          setNames(sortedNamesList);
+          setNames(namesList);
           console.log('Connected to Realtime Database successfully.');
         });
       } catch (e) {
@@ -67,12 +83,6 @@ const App: React.FC = () => {
     };
 
     fetchNames();
-
-    const timer = setTimeout(() => {
-      setConfetti(false);
-    }, 4000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const handleReset = () => {
@@ -83,14 +93,24 @@ const App: React.FC = () => {
     });
     setNames(resetNames);
     Cookies.remove('votedName');
+    setShowVotes(false);
+    setConfetti(false);
   };
+
+  const handleFinish = () => {
+    setShowVotes(true);
+    setConfetti(true);
+  };
+
+  const sortedNames = showVotes ? [...names].sort((a, b) => b.votes - a.votes) : names;
 
   return (
     <div className="base">
       {confetti && <Confetti />}
       <AppContainer>
+        <FinishButton onClick={handleFinish}>Finish</FinishButton>
         <Title>ISTC Sprint Hero</Title>
-        <NameList names={names} setNames={setNames} />
+        <NameList names={sortedNames} setNames={setNames} showVotes={showVotes} />
         <ResetButton onClick={handleReset}>Reset</ResetButton>
       </AppContainer>
     </div>
