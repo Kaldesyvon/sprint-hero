@@ -34,3 +34,5 @@ jobs:
 
       - name: Deploy to GH
         uses: actions/deploy-pages@v3
+        permissions:
+          id-token: write
