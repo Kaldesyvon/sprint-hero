@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Name } from './App';
-import { db } from './firebase';
+// import { db } from './firebase';
 import { ref, update } from 'firebase/database';
 
 const ModalContainer = styled.div`
@@ -97,8 +97,8 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ name, setNames, names, on
       );
       setNames(updatedNames);
 
-      const nameRef = ref(db, `names/${name.id}`);
-      await update(nameRef, { comments: updatedComments });
+      // const nameRef = ref(db, `names/${name.id}`);
+      // await update(nameRef, { comments: updatedComments });
 
       setComment('');
     }

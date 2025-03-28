@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import CommentsModal from './CommentsModal';
 import { Name } from './App';
 import Cookies from 'js-cookie';
-import { db } from './firebase';
+// import { db } from './firebase';
 import { ref, update } from 'firebase/database';
 
 const ItemContainer = styled.div<{ isFirst: boolean, showVotes: boolean, hasVotes: boolean }>`
@@ -59,8 +59,8 @@ const NameItem: React.FC<NameItemProps> = ({ name, setNames, names, index, showV
     const updatedNames = names.map(n => n.id === name.id ? { ...n, votes: n.votes + 1 } : n);
     setNames(updatedNames);
 
-    const nameRef = ref(db, `names/${name.id}`);
-    await update(nameRef, { votes: name.votes + 1 });
+    // const nameRef = ref(db, `names/${name.id}`);
+    // await update(nameRef, { votes: name.votes + 1 });
 
     Cookies.set('votedName', name.id.toString(), { expires: 365 });
   };

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NameList from './NameList';
 import Cookies from 'js-cookie';
 import Confetti from 'react-confetti';
-import { db } from './firebase';
+// import { db } from './firebase';
 import { ref, onValue, set } from 'firebase/database';
 
 const AppContainer = styled.div`
@@ -67,16 +67,16 @@ const App: React.FC = () => {
     const fetchNames = () => {
       try {
         console.log("fetching");
-        const namesRef = ref(db, 'names');
-        onValue(namesRef, (snapshot) => {
-          console.log("got database");
-          const data = snapshot.val();
-          const namesList = data
-            ? Object.keys(data).map(key => ({ id: key, name: data[key].name, votes: data[key].votes, comments: data[key].comments }))
-            : [];
-          setNames(namesList);
-          console.log('Connected to Realtime Database successfully.');
-        });
+        // const namesRef = ref(db, 'names');
+        // onValue(namesRef, (snapshot) => {
+        //   console.log("got database");
+        //   const data = snapshot.val();
+        //   const namesList = data
+        //     ? Object.keys(data).map(key => ({ id: key, name: data[key].name, votes: data[key].votes, comments: data[key].comments }))
+        //     : [];
+        //   setNames(namesList);
+        //   console.log('Connected to Realtime Database successfully.');
+        // });
       } catch (e) {
         console.log("failed to fetch: " + (e as Error).message);
       }
@@ -87,10 +87,10 @@ const App: React.FC = () => {
 
   const handleReset = () => {
     const resetNames = names.map(name => ({ ...name, votes: 0, comments: { "0": "none" } }));
-    resetNames.forEach(async name => {
-      const nameRef = ref(db, `names/${name.id}`);
-      await set(nameRef, { ...name, votes: 0, comments: { "0": "none" } });
-    });
+    // resetNames.forEach(async name => {
+    //   const nameRef = ref(db, `names/${name.id}`);
+    //   await set(nameRef, { ...name, votes: 0, comments: { "0": "none" } });
+    // });
     setNames(resetNames);
     Cookies.remove('votedName');
     setShowVotes(false);
