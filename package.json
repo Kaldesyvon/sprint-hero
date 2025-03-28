@@ -1,8 +1,7 @@
 {
   "name": "sprint-hero",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "https://kaldesyvon.github.io/sprint-hero",
+  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
